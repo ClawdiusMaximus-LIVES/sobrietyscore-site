@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SobrietyScore — Recovery, Measured.</title>
+<meta name="description" content="Track your sobriety journey with beautiful orbital rings, HealthKit recovery insights, and AI-powered reflection. Free for iOS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Bricolage+Grotesque:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  :root {
+    --bg: #050709;
+    --bg2: #080a0f;
+    --s1: #0f1219;
+    --s2: #151a24;
+    --s3: #1c2330;
+    --border: #222b3a;
+    --teal: #00d4aa;
+    --tealDim: rgba(0,212,170,0.10);
+    --tealGlow: rgba(0,212,170,0.25);
+    --purple: #b088ff;
+    --purpleDim: rgba(176,136,255,0.10);
+    --amber: #ffd166;
+    --amberDim: rgba(255,209,102,0.10);
+    --blue: #4fc3f7;
+    --pink: #f78fb3;
+    --red: #ff6b6b;
+    --text: #dce2ee;
+    --subtle: #8a95aa;
+    --muted: #5a6478;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Bricolage Grotesque', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* HERO SECTION                           */
+  /* ═══════════════════════════════════════ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #p5-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 10vw, 96px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s forwards;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 500;
+    color: var(--subtle);
+    margin-top: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.7s forwards;
+  }
+
+  .hero-cta-group {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    pointer-events: auto;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 36px;
+    background: var(--teal);
+    color: #050709;
+    font-family: var(--sans);
+    font-size: 17px;
+    font-weight: 700;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 40px rgba(0,212,170,0.3), 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(0,212,170,0.45), 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  .cta-button svg { width: 22px; height: 22px; }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+  }
+
+  .scroll-hint span {
+    display: block;
+    width: 24px;
+    height: 38px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    position: relative;
+  }
+
+  .scroll-hint span::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 8px;
+    background: var(--teal);
+    border-radius: 2px;
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scrollDot 2s ease infinite;
+  }
+
+  @keyframes scrollDot {
+    0%, 100% { opacity: 1; top: 6px; }
+    50% { opacity: 0.3; top: 18px; }
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* SECTIONS                               */
+  /* ═══════════════════════════════════════ */
+  section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+    color: var(--subtle);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* COUNTER SHOWCASE                       */
+  /* ═══════════════════════════════════════ */
+  .counter-section {
+    text-align: center;
+    position: relative;
+  }
+
+  .counter-section .section-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .phone-mockup {
+    display: inline-block;
+    width: 320px;
+    background: var(--bg2);
+    border-radius: 44px;
+    border: 3px solid var(--s3);
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 80px rgba(0,212,170,0.06);
+    padding: 20px;
+    position: relative;
+  }
+
+  .phone-mockup .notch {
+    width: 120px;
+    height: 30px;
+    background: var(--bg2);
+    border-radius: 0 0 18px 18px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .phone-mockup .notch::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 5px;
+    background: var(--s3);
+    border-radius: 3px;
+    margin: 12px auto 0;
+  }
+
+  #live-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 24px;
+  }
+
+  .counter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--tealDim);
+    border: 1px solid rgba(0,212,170,0.2);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--teal);
+    margin-top: 16px;
+  }
+
+  .counter-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* FEATURES GRID                          */
+  /* ═══════════════════════════════════════ */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .feature-card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card:hover {
+    border-color: var(--teal);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .feature-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: var(--subtle);
+    line-height: 1.6;
+  }
+
+  .feature-card .tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .tag-free { background: var(--tealDim); color: var(--teal); }
+  .tag-premium { background: var(--purpleDim); color: var(--purple); }
+
+  /* ═══════════════════════════════════════ */
+  /* HEALTH INSIGHTS SECTION                */
+  /* ═══════════════════════════════════════ */
+  .health-section {
+    position: relative;
+  }
+
+  .health-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .health-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .health-card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .health-card .ring-wrap {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 14px;
+    position: relative;
+  }
+
+  .health-card .pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .health-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .health-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* DIFFERENTIATOR / WHY SECTION           */
+  /* ═══════════════════════════════════════ */
+  .why-section { text-align: center; }
+
+  .why-section .section-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .why-grid { grid-template-columns: 1fr; }
+  }
+
+  .why-card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-align: center;
+  }
+
+  .why-card .num {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .why-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .why-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* FINAL CTA                              */
+  /* ═══════════════════════════════════════ */
+  .final-cta {
+    text-align: center;
+    padding: 120px 24px;
+    position: relative;
+  }
+
+  .final-cta .section-title {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 12px;
+  }
+
+  .final-cta .section-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+  }
+
+  .final-cta .glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,170,0.06) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* FOOTER                                 */
+  /* ═══════════════════════════════════════ */
+  footer {
+    text-align: center;
+    padding: 40px 24px 60px;
+    border-top: 1px solid var(--border);
+  }
+
+  footer p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--teal);
+    text-decoration: none;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* ANIMATIONS                             */
+  /* ═══════════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* DIVIDERS                               */
+  /* ═══════════════════════════════════════ */
+  .divider {
+    height: 1px;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* RESPONSIVE                             */
+  /* ═══════════════════════════════════════ */
+  @media (max-width: 600px) {
+    section { padding: 60px 20px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .phone-mockup { width: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- HERO                                   -->
+<!-- ═══════════════════════════════════════ -->
+<div class="hero">
+  <div id="p5-canvas"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Recovery, Measured.</div>
+    <h1 class="hero-title">Sobriety<br><em>Score</em></h1>
+    <p class="hero-tagline">Watch your body heal in real time. Beautiful sobriety tracking powered by Apple Health insights and on-device AI.</p>
+    <div class="hero-cta-group">
+      <a href="https://apps.apple.com/app/sobrietyscore" class="cta-button">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download Free on iOS
+      </a>
+      <span class="hero-sub">Free forever. No account required. Your data stays on your device.</span>
+    </div>
+  </div>
+  <div class="scroll-hint"><span></span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- LIVE COUNTER SHOWCASE                  -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<section class="counter-section reveal">
+  <div class="section-eyebrow">The Counter</div>
+  <div class="section-title">Your sobriety,<br>alive and breathing</div>
+  <p class="section-subtitle">Six orbital rings pulse with your progress — years, months, days, hours, minutes, seconds. Every tick is proof you're still going.</p>
+  <div class="phone-mockup">
+    <div class="notch"></div>
+    <div id="live-counter"></div>
+  </div>
+  <div class="counter-badge"><span class="dot"></span> Live — updates every second</div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FEATURES                               -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<section class="reveal">
+  <div class="section-eyebrow">Features</div>
+  <div class="section-title">Everything you need.<br>Nothing you don't.</div>
+  <p class="section-subtitle">Built by someone in recovery, for people in recovery. No bloat, no judgment, no accounts.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:var(--tealDim);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h3>Living Counter</h3>
+      <p>Orbital rings that glow and pulse with your sobriety time. Years, months, days, hours, minutes, seconds — all alive.</p>
+      <span class="tag tag-free">Free</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:var(--purpleDim);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <h3>HealthKit Recovery</h3>
+      <p>See your sleep improve, heart rate drop, and HRV climb. Real biometric proof your body is healing — powered by Apple Health.</p>
+      <span class="tag tag-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:var(--amberDim);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"/></svg>
+      </div>
+      <h3>Daily Pledge & Milestones</h3>
+      <p>Morning pledge, evening check-in, and milestone celebrations with confetti. From Day 1 to Year 10 and beyond.</p>
+      <span class="tag tag-free">Free</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(79,195,247,0.10);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h3>AI Reflection Partner</h3>
+      <p>On-device AI journal coach that knows your journey. Craving support, weekly narratives, and crisis detection — all private, all local.</p>
+      <span class="tag tag-premium">Premium</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(247,143,179,0.10);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <h3>Streak Calendar</h3>
+      <p>Visual history of every sober day. Green for good, honest about resets. Mood tracking, craving logs, and journal entries woven in.</p>
+      <span class="tag tag-free">Free</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(255,107,107,0.10);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>100% Private</h3>
+      <p>No accounts. No cloud. No analytics. Everything lives on your device, protected by Face ID. Your recovery is yours alone.</p>
+      <span class="tag tag-free">Free</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- HEALTH INSIGHTS                        -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<section class="health-section reveal">
+  <div class="section-eyebrow">Recovery Insights</div>
+  <div class="section-title">Your body is healing.<br>Now you can see it.</div>
+  <p class="section-subtitle">HealthKit integration tracks real biometric improvements over time — the data your doctor would love to see.</p>
+  <div class="health-grid">
+    <div class="health-card">
+      <div class="ring-wrap">
+        <svg width="80" height="80" style="transform:rotate(-90deg)">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--s3)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#7c6ff7" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="21.36" stroke-linecap="round"/>
+        </svg>
+        <div class="pct" style="color:#7c6ff7">90%</div>
+      </div>
+      <h4>Sleep Quality</h4>
+      <p>Deep sleep rebounds within weeks</p>
+    </div>
+    <div class="health-card">
+      <div class="ring-wrap">
+        <svg width="80" height="80" style="transform:rotate(-90deg)">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--s3)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--red)" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="32.04" stroke-linecap="round"/>
+        </svg>
+        <div class="pct" style="color:var(--red)">85%</div>
+      </div>
+      <h4>Heart Rate</h4>
+      <p>Resting HR drops measurably</p>
+    </div>
+    <div class="health-card">
+      <div class="ring-wrap">
+        <svg width="80" height="80" style="transform:rotate(-90deg)">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--s3)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="#ffa94d" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="10.68" stroke-linecap="round"/>
+        </svg>
+        <div class="pct" style="color:#ffa94d">95%</div>
+      </div>
+      <h4>Liver Recovery</h4>
+      <p>Regeneration begins in days</p>
+    </div>
+    <div class="health-card">
+      <div class="ring-wrap">
+        <svg width="80" height="80" style="transform:rotate(-90deg)">
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--s3)" stroke-width="6"/>
+          <circle cx="40" cy="40" r="34" fill="none" stroke="var(--blue)" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="25.63" stroke-linecap="round"/>
+        </svg>
+        <div class="pct" style="color:var(--blue)">88%</div>
+      </div>
+      <h4>Brain Clarity</h4>
+      <p>Cognitive function improves steadily</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- WHY SOBRIETYSCORE                      -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<section class="why-section reveal">
+  <div class="section-eyebrow">Why SobrietyScore</div>
+  <div class="section-title">Not just another counter app</div>
+  <p class="section-subtitle">Other apps charge for basic features. We give you more — for free — and the premium features are things no one else even offers.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="num" style="color:var(--teal)">$0</div>
+      <h4>Widgets & Face ID</h4>
+      <p>Home screen widgets and biometric lock — free. Others charge $9.99/yr.</p>
+    </div>
+    <div class="why-card">
+      <div class="num" style="color:var(--purple)">100%</div>
+      <h4>On-Device</h4>
+      <p>Your data never leaves your phone. No servers, no accounts, no tracking.</p>
+    </div>
+    <div class="why-card">
+      <div class="num" style="color:var(--amber)">AI</div>
+      <h4>Smart & Private</h4>
+      <p>Apple's on-device AI for journaling and craving support. No cloud, no data sharing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FINAL CTA                              -->
+<!-- ═══════════════════════════════════════ -->
+<div class="divider"></div>
+<section class="final-cta reveal">
+  <div class="glow"></div>
+  <div class="section-eyebrow">Start today</div>
+  <div class="section-title">Every second sober<br>is a second earned</div>
+  <p class="section-subtitle" style="margin-bottom:40px;">Your recovery is already happening. SobrietyScore just makes it visible.</p>
+  <a href="https://apps.apple.com/app/sobrietyscore" class="cta-button">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    Download Free on iOS
+  </a>
+</section>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FOOTER                                 -->
+<!-- ═══════════════════════════════════════ -->
+<footer>
+  <p>&copy; 2026 SobrietyScore. Made with care for people in recovery.</p>
+</footer>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- P5.JS — ORBITAL RINGS HERO ANIMATION  -->
+<!-- ═══════════════════════════════════════ -->
+<script>
+const P5_CONTAINER = document.getElementById('p5-canvas');
+
+const sketch = (p) => {
+  // Ring configuration matching the app's design
+  const RING_COLORS = [
+    { r: 0,   g: 212, b: 170 }, // teal — years
+    { r: 79,  g: 195, b: 247 }, // blue — months
+    { r: 176, g: 136, b: 255 }, // purple — days
+    { r: 255, g: 209, b: 102 }, // amber — hours
+    { r: 255, g: 107, b: 107 }, // red — minutes
+    { r: 247, g: 143, b: 179 }, // pink — seconds
+  ];
+
+  const NUM_RINGS = 6;
+  const PARTICLE_COUNT = 60;
+  let particles = [];
+  let time = 0;
+  let canvasW, canvasH;
+
+  class Ring {
+    constructor(index, total) {
+      this.index = index;
+      this.color = RING_COLORS[index];
+      this.baseSpeed = 0.0004 + index * 0.00035;
+      this.angle = p.random(p.TWO_PI);
+      this.wobble = p.random(0.3, 0.7);
+      this.wobbleSpeed = 0.001 + p.random(0.001);
+    }
+
+    getRadius(cx) {
+      const maxR = Math.min(cx * 0.85, 380);
+      const minR = maxR * 0.25;
+      const step = (maxR - minR) / NUM_RINGS;
+      return maxR - this.index * step;
+    }
+
+    getStroke() {
+      return p.map(this.index, 0, NUM_RINGS - 1, 3.5, 1.5);
+    }
+  }
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+
+    reset() {
+      this.ringIdx = Math.floor(p.random(NUM_RINGS));
+      this.angleOffset = p.random(p.TWO_PI);
+      this.speed = p.random(0.002, 0.008);
+      this.size = p.random(1.5, 4);
+      this.alpha = p.random(60, 180);
+      this.life = p.random(200, 600);
+      this.maxLife = this.life;
+      this.drift = p.random(-0.5, 0.5);
+    }
+  }
+
+  let rings = [];
+
+  p.setup = function() {
+    canvasW = P5_CONTAINER.offsetWidth;
+    canvasH = P5_CONTAINER.offsetHeight;
+    const canvas = p.createCanvas(canvasW, canvasH);
+    canvas.parent(P5_CONTAINER);
+    canvas.style('display', 'block');
+
+    for (let i = 0; i < NUM_RINGS; i++) {
+      rings.push(new Ring(i, NUM_RINGS));
+    }
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new Particle());
+    }
+  };
+
+  p.windowResized = function() {
+    canvasW = P5_CONTAINER.offsetWidth;
+    canvasH = P5_CONTAINER.offsetHeight;
+    p.resizeCanvas(canvasW, canvasH);
+  };
+
+  p.draw = function() {
+    p.clear();
+    time += p.deltaTime;
+    const cx = canvasW / 2;
+    const cy = canvasH / 2;
+
+    // Draw rings
+    p.noFill();
+    for (let ring of rings) {
+      ring.angle += ring.baseSpeed * p.deltaTime;
+      const r = ring.getRadius(Math.min(cx, cy));
+      const sw = ring.getStroke();
+      const c = ring.color;
+
+      // Subtle wobble
+      const wobbleOffset = Math.sin(time * ring.wobbleSpeed) * ring.wobble * 8;
+
+      // Draw the arc — each ring draws a partial arc that slowly rotates
+      const arcLength = p.map(
+        Math.sin(time * 0.0003 + ring.index * 0.7),
+        -1, 1,
+        p.PI * 0.6, p.PI * 1.8
+      );
+
+      // Glow layer (larger, dimmer)
+      p.push();
+      p.translate(cx, cy + wobbleOffset * 0.3);
+      p.rotate(ring.angle);
+      p.strokeWeight(sw + 6);
+      p.stroke(c.r, c.g, c.b, 20);
+      p.arc(0, 0, r * 2, r * 2, 0, arcLength);
+
+      // Second glow
+      p.strokeWeight(sw + 3);
+      p.stroke(c.r, c.g, c.b, 35);
+      p.arc(0, 0, r * 2, r * 2, 0, arcLength);
+
+      // Core ring
+      p.strokeWeight(sw);
+      p.stroke(c.r, c.g, c.b, 140);
+      p.arc(0, 0, r * 2, r * 2, 0, arcLength);
+
+      // Bright tip
+      const tipX = Math.cos(arcLength) * r;
+      const tipY = Math.sin(arcLength) * r;
+      p.noStroke();
+      p.fill(c.r, c.g, c.b, 200);
+      p.circle(tipX, tipY, sw + 2);
+      p.fill(c.r, c.g, c.b, 40);
+      p.circle(tipX, tipY, sw + 12);
+      p.pop();
+    }
+
+    // Draw particles along ring paths
+    for (let pt of particles) {
+      pt.life--;
+      if (pt.life <= 0) pt.reset();
+
+      pt.angleOffset += pt.speed;
+      const ring = rings[pt.ringIdx];
+      const r = ring.getRadius(Math.min(cx, cy));
+      const c = ring.color;
+      const wobbleOffset = Math.sin(time * ring.wobbleSpeed) * ring.wobble * 8;
+
+      const px = cx + Math.cos(pt.angleOffset + ring.angle) * (r + pt.drift * 6);
+      const py = cy + wobbleOffset * 0.3 + Math.sin(pt.angleOffset + ring.angle) * (r + pt.drift * 6);
+
+      const fadeIn = p.constrain(p.map(pt.life, pt.maxLife, pt.maxLife - 40, 0, 1), 0, 1);
+      const fadeOut = p.constrain(p.map(pt.life, 40, 0, 1, 0), 0, 1);
+      const alpha = pt.alpha * fadeIn * fadeOut;
+
+      p.noStroke();
+      p.fill(c.r, c.g, c.b, alpha * 0.3);
+      p.circle(px, py, pt.size * 3);
+      p.fill(c.r, c.g, c.b, alpha);
+      p.circle(px, py, pt.size);
+    }
+
+    // Central glow
+    const breathe = p.map(Math.sin(time * 0.001), -1, 1, 0.6, 1);
+    const glowSize = Math.min(cx, cy) * 0.35 * breathe;
+    for (let i = 3; i > 0; i--) {
+      p.noStroke();
+      p.fill(0, 212, 170, 3 * i);
+      p.circle(cx, cy, glowSize * i);
+    }
+  };
+};
+
+new p5(sketch);
+</script>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- LIVE COUNTER (SVG, matching app)       -->
+<!-- ═══════════════════════════════════════ -->
+<script>
+(function() {
+  const START = new Date();
+  START.setDate(START.getDate() - 1643); // ~4.5 years
+
+  const pad = n => String(n).padStart(2, '0');
+  const RING_COLORS = ['#00d4aa','#4fc3f7','#b088ff','#ffd166','#ff6b6b','#f78fb3'];
+  const RING_SW = [10, 8, 7, 6, 5, 4];
+  const RING_MAX = [5, 12, 30, 24, 60, 60];
+
+  function getTime() {
+    const now = new Date();
+    let y = now.getFullYear() - START.getFullYear();
+    let mo = now.getMonth() - START.getMonth();
+    let d = now.getDate() - START.getDate();
+    let h = now.getHours() - START.getHours();
+    let mi = now.getMinutes() - START.getMinutes();
+    let s = now.getSeconds() - START.getSeconds();
+    if (s < 0) { s += 60; mi--; }
+    if (mi < 0) { mi += 60; h--; }
+    if (h < 0) { h += 24; d--; }
+    if (d < 0) { const prev = new Date(now.getFullYear(), now.getMonth(), 0); d += prev.getDate(); mo--; }
+    if (mo < 0) { mo += 12; y--; }
+    return { y, mo, d, h, mi, s };
+  }
+
+  function render() {
+    const t = getTime();
+    const size = 260;
+    const cx = size / 2;
+    const startR = size / 2 - 6;
+    const gap = 2.5;
+    const vals = [t.y, t.mo, t.d, t.h, t.mi, t.s];
+    const pcts = vals.map((v, i) => Math.min((v / RING_MAX[i]) * 100, 100));
+
+    let filters = '', rings = '';
+    for (let i = 0; i < 6; i++) {
+      const r = startR - i * (RING_SW[i] + gap);
+      const sd = i < 2 ? 5 : 3;
+      filters += `<filter id="lg${i}"><feGaussianBlur stdDeviation="${sd}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+      const circ = 2 * Math.PI * r;
+      const offset = circ - (pcts[i] / 100) * circ;
+      rings += `
+        <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="#1c2330" stroke-width="${RING_SW[i]}" opacity="0.35"/>
+        <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${RING_COLORS[i]}" stroke-width="${RING_SW[i]}"
+          stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round"
+          filter="url(#lg${i})" style="transition:stroke-dashoffset 0.3s ease-out"/>
+      `;
+    }
+
+    let heroNum, heroLabel, subParts = [];
+    if (t.y > 0) {
+      heroNum = t.y; heroLabel = t.y === 1 ? 'year' : 'years';
+      if (t.mo > 0) subParts.push({ val: t.mo, unit: 'mo' });
+      if (t.d > 0) subParts.push({ val: t.d, unit: t.d === 1 ? 'day' : 'days' });
+    } else if (t.mo > 0) {
+      heroNum = t.mo; heroLabel = t.mo === 1 ? 'month' : 'months';
+      if (t.d > 0) subParts.push({ val: t.d, unit: t.d === 1 ? 'day' : 'days' });
+    } else {
+      heroNum = t.d; heroLabel = t.d === 1 ? 'day' : 'days';
+    }
+
+    let subHtml = subParts.map(p =>
+      `<span style="font-size:18px;font-weight:800;color:#dce2ee;">${p.val}</span>` +
+      `<span style="font-size:11px;font-weight:600;color:#5a6478;margin-left:2px;">${p.unit}</span>`
+    ).join('<span style="color:#222b3a;margin:0 4px;">·</span>');
+
+    document.getElementById('live-counter').innerHTML = `
+      <div style="position:relative;width:${size}px;height:${size}px;">
+        <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
+          <defs>${filters}</defs>
+          ${rings}
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:64px;font-weight:800;color:#dce2ee;line-height:1;letter-spacing:-0.04em;">${heroNum}</div>
+          <div style="font-size:14px;font-weight:700;color:#00d4aa;text-transform:uppercase;letter-spacing:0.18em;margin-top:2px;">${heroLabel}</div>
+          ${subHtml ? `<div style="margin-top:8px;display:flex;align-items:baseline;gap:2px;">${subHtml}</div>` : ''}
+          <div style="margin-top:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:#5a6478;letter-spacing:0.06em;">
+            ${pad(t.h)}:${pad(t.mi)}:${pad(t.s)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  render();
+  setInterval(render, 1000);
+})();
+</script>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SCROLL REVEAL                          -->
+<!-- ═══════════════════════════════════════ -->
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Use — Sobriety Score</title>
+  <meta name="description" content="Terms of Use for Sobriety Score, the sobriety tracking app with HealthKit integration and on-device AI.">
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --surface: #12141a;
+      --text: #e4e6ed;
+      --text-dim: #8b8fa3;
+      --accent: #06b6d4;
+      --border: #2a2e3a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      padding: 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    .effective { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 32px; }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 36px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 { font-size: 1rem; font-weight: 600; margin: 20px 0 8px; color: var(--text); }
+    p { margin-bottom: 12px; color: var(--text); font-size: 0.92rem; }
+    ul { margin: 8px 0 16px 20px; }
+    li { margin-bottom: 6px; font-size: 0.92rem; color: var(--text); }
+    .highlight {
+      background: rgba(6,182,212,0.08);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .warning {
+      background: rgba(251,191,36,0.08);
+      border-left: 3px solid #fbbf24;
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .toc-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; color: var(--accent); }
+    .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; display: block; padding: 3px 0; }
+    .toc a:hover { color: var(--accent); }
+    a { color: var(--accent); }
+    .back-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .back-top.visible { display: flex; }
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    @media print {
+      body { background: #fff; color: #111; }
+      h1 { -webkit-text-fill-color: #06b6d4; }
+      h2 { color: #06b6d4; }
+      .back-top { display: none !important; }
+    }
+    @media (max-width: 600px) {
+      body { padding: 16px; }
+      h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Sobriety Score — Terms of Use</h1>
+<p class="effective">Effective Date: March 22, 2026</p>
+
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <a href="#acceptance">1. Acceptance of Terms</a>
+  <a href="#description">2. Description of Service</a>
+  <a href="#eligibility">3. Eligibility</a>
+  <a href="#subscriptions">4. Subscriptions & Payments</a>
+  <a href="#health">5. Health Disclaimer</a>
+  <a href="#crisis">6. Crisis Resources</a>
+  <a href="#acceptable">7. Acceptable Use</a>
+  <a href="#content">8. Your Content</a>
+  <a href="#ip">9. Intellectual Property</a>
+  <a href="#warranties">10. Disclaimer of Warranties</a>
+  <a href="#liability">11. Limitation of Liability</a>
+  <a href="#indemnification">12. Indemnification</a>
+  <a href="#termination">13. Termination</a>
+  <a href="#governing">14. Governing Law</a>
+  <a href="#changes">15. Changes to Terms</a>
+  <a href="#contact">16. Contact Us</a>
+</nav>
+
+<h2 id="acceptance">1. Acceptance of Terms</h2>
+<p>By downloading, installing, or using Sobriety Score ("the App"), you agree to be bound by these Terms of Use ("Terms"). If you do not agree to these Terms, do not use the App.</p>
+<p>These Terms constitute a legal agreement between you and DreamSeeds ("we," "us," or "our"), the developer of Sobriety Score.</p>
+
+<h2 id="description">2. Description of Service</h2>
+<p>Sobriety Score is a personal sobriety tracking and health recovery app for iPhone. The App allows you to track your sobriety streak across multiple substances or habits, view health recovery trends using Apple Health data, journal with on-device AI reflection prompts, log and monitor cravings, track milestones, and calculate savings from sobriety.</p>
+<p>The App offers both free and premium features. Premium features are available through in-app purchases (subscriptions or a one-time lifetime purchase).</p>
+
+<h2 id="eligibility">3. Eligibility</h2>
+<p>Sobriety Score is intended for users aged 17 and older. By using the App, you represent that you are at least 17 years of age. If you are under 17, you may not use the App.</p>
+<p>The App deals with substance use, addiction recovery, and related health topics that are intended for adult audiences.</p>
+
+<h2 id="subscriptions">4. Subscriptions & Payments</h2>
+
+<h3>Purchasing</h3>
+<p>Sobriety Score offers premium features through the following purchase options: monthly subscription, annual subscription, and lifetime one-time purchase. Current pricing is displayed within the App at the time of purchase.</p>
+
+<h3>Billing</h3>
+<p>All purchases are processed through Apple's App Store. Payment is charged to your Apple ID account at confirmation of purchase. We do not collect, store, or have access to your payment information.</p>
+
+<h3>Auto-Renewal</h3>
+<p>Subscriptions (monthly and annual) automatically renew unless you cancel at least 24 hours before the end of the current billing period. Your Apple ID account will be charged for renewal within 24 hours prior to the end of the current period at the same price.</p>
+
+<h3>Managing & Cancelling</h3>
+<p>You can manage or cancel your subscription at any time through your iPhone's Settings → [Your Name] → Subscriptions. Cancellation takes effect at the end of the current billing period — you retain access to premium features until then.</p>
+
+<h3>Free Trials</h3>
+<p>If a free trial is offered, any unused portion of the trial period is forfeited when you purchase a subscription. Free trial eligibility is determined by Apple and is typically limited to one trial per Apple ID.</p>
+
+<h3>Refunds</h3>
+<p>We do not process refunds directly. All refund requests are handled by Apple. To request a refund, visit <a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>.</p>
+
+<h3>Price Changes</h3>
+<p>We may change subscription pricing from time to time. If we do, Apple will notify you in advance and you will have the opportunity to cancel before the new price takes effect. Lifetime purchases are not affected by future price changes.</p>
+
+<h2 id="health">5. Health Disclaimer</h2>
+<div class="warning">
+  <strong>Please read this section carefully.</strong>
+</div>
+<p>Sobriety Score is a wellness and motivational tool. It is <strong>not</strong> a medical device, and it is <strong>not</strong> a substitute for professional medical advice, diagnosis, or treatment.</p>
+<ul>
+  <li>Health data displayed in the App (sleep quality, heart rate trends, activity levels) is drawn from Apple Health and is presented for <strong>informational and motivational purposes only</strong>.</li>
+  <li>The App does not diagnose any medical condition, prescribe treatments, or provide medical recommendations.</li>
+  <li>AI-generated reflection prompts are for journaling and self-reflection purposes only. They are not therapy, counseling, or medical advice.</li>
+  <li>Recovery milestones, health trend indicators, and improvement statistics shown in the App are based on your personal data and general wellness patterns. Individual results vary.</li>
+  <li>Always consult a qualified healthcare provider before making decisions about your health, substance use, medications, or treatment plan.</li>
+  <li>If you are experiencing a medical emergency, call 911 (US) or your local emergency number immediately.</li>
+</ul>
+<p>By using the App, you acknowledge that DreamSeeds is not a healthcare provider and that you use the health-related features at your own discretion.</p>
+
+<h2 id="crisis">6. Crisis Resources</h2>
+<p>If you or someone you know is in crisis:</p>
+<ul>
+  <li><strong>988 Suicide & Crisis Lifeline:</strong> Call or text <strong>988</strong> (US) — available 24/7</li>
+  <li><strong>SAMHSA National Helpline:</strong> <strong>1-800-662-4357</strong> — free, confidential, 24/7 treatment referrals</li>
+  <li><strong>Crisis Text Line:</strong> Text <strong>HOME</strong> to <strong>741741</strong></li>
+  <li><strong>Emergency:</strong> Call <strong>911</strong></li>
+</ul>
+<p>Sobriety Score includes in-app access to crisis resources. The App is not a crisis intervention tool and should not be used as a substitute for professional crisis support.</p>
+
+<h2 id="acceptable">7. Acceptable Use</h2>
+<p>You agree to use Sobriety Score only for its intended purpose as a personal sobriety tracking and wellness tool. You agree not to:</p>
+<ul>
+  <li>Reverse engineer, decompile, or disassemble the App</li>
+  <li>Attempt to access or extract the App's source code</li>
+  <li>Use the App for any unlawful purpose</li>
+  <li>Modify, adapt, or create derivative works from the App</li>
+  <li>Redistribute, sublicense, or sell the App or any part of it</li>
+  <li>Attempt to interfere with or disrupt the App's functionality</li>
+</ul>
+
+<h2 id="content">8. Your Content</h2>
+<p>You retain full ownership of all content you create in the App, including journal entries, craving logs, notes, and any other personal data you input.</p>
+<p>Since all your content is stored locally on your device, you are responsible for maintaining your own backups. If you delete the App or lose your device, your content cannot be recovered by us.</p>
+<p>On-device AI features process your content locally to generate personalized reflection prompts. Your content is never uploaded to any server for AI processing. You retain full ownership and control of everything you write.</p>
+
+<h2 id="ip">9. Intellectual Property</h2>
+<p>The Sobriety Score app, including its design, code, graphics, icons, interface, and content (excluding your personal data), is the property of DreamSeeds and is protected by copyright and other intellectual property laws.</p>
+<p>"Sobriety Score" and the Sobriety Score logo are trademarks of DreamSeeds. You may not use our trademarks without prior written permission.</p>
+<p>Apple, iPhone, Apple Health, HealthKit, StoreKit, Siri, and Dynamic Island are trademarks of Apple Inc.</p>
+
+<h2 id="warranties">10. Disclaimer of Warranties</h2>
+<p>Sobriety Score is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+<p>We do not warrant that the App will be uninterrupted, error-free, or free of harmful components. We do not guarantee the accuracy of health trend data, milestone calculations, or AI-generated content.</p>
+<p>Your use of the App is at your sole risk.</p>
+
+<h2 id="liability">11. Limitation of Liability</h2>
+<p>To the maximum extent permitted by applicable law, DreamSeeds shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, loss of profits, personal injury, or damages arising from:</p>
+<ul>
+  <li>Your use of or inability to use the App</li>
+  <li>Any health-related decisions made based on information displayed in the App</li>
+  <li>Inaccuracies in health data, streak calculations, or AI-generated content</li>
+  <li>Loss of locally stored data due to device failure, App deletion, or iOS updates</li>
+  <li>Unauthorized access to your device</li>
+</ul>
+<p>In no event shall our total liability exceed the amount you paid for the App in the twelve (12) months preceding the claim.</p>
+
+<h2 id="indemnification">12. Indemnification</h2>
+<p>You agree to indemnify, defend, and hold harmless DreamSeeds and its officers, directors, employees, and agents from any claims, damages, losses, liabilities, costs, and expenses (including reasonable attorneys' fees) arising from your use of the App or your violation of these Terms.</p>
+
+<h2 id="termination">13. Termination</h2>
+<p>You may stop using the App and delete it at any time. Upon deletion, all locally stored data is permanently removed from your device.</p>
+<p>We reserve the right to modify, suspend, or discontinue the App at any time, with or without notice. If we discontinue the App, we will make reasonable efforts to provide advance notice.</p>
+<p>Active subscriptions can be cancelled through Apple's subscription management. We do not have the ability to cancel your subscription on your behalf.</p>
+
+<h2 id="governing">14. Governing Law</h2>
+<p>These Terms are governed by and construed in accordance with the laws of the State of Texas, United States, without regard to its conflict of law provisions. Any disputes arising under these Terms shall be resolved in the courts located in the State of Texas.</p>
+
+<h2 id="changes">15. Changes to Terms</h2>
+<p>We may update these Terms from time to time. If we make material changes, we will update the "Effective Date" at the top of this page and may notify you through the App. Your continued use of the App after changes are posted constitutes acceptance of the revised Terms.</p>
+<p>We encourage you to review these Terms periodically.</p>
+
+<h2 id="contact">16. Contact Us</h2>
+<p>If you have questions about these Terms of Use, contact us at:</p>
+<p>
+  <strong>DreamSeeds</strong><br>
+  Email: <a href="mailto:dreamseedsapp@gmail.com">dreamseedsapp@gmail.com</a><br>
+  Website: <a href="https://sobrietyscore.com">sobrietyscore.com</a>
+</p>
+
+<footer>
+  &copy; 2026 DreamSeeds. All rights reserved.<br>
+  Sobriety Score — Terms of Use
+</footer>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" id="backTop">↑</button>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400);
+  });
+</script>
+
+</body>
+</html>

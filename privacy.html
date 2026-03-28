@@ -139,14 +139,8 @@
 <div class="highlight">All of the above data is stored locally on your device. It is never transmitted to our servers or any third party.</div>
 
 <h3>2b. Information Collected Automatically</h3>
-<p>Sobriety Score uses Superwall for paywall presentation and subscription management. Superwall may collect:</p>
-<ul>
-  <li>Anonymous device identifiers</li>
-  <li>App usage events related to paywall interactions (e.g., paywall viewed, purchase initiated)</li>
-  <li>Device type and operating system version</li>
-</ul>
-<p>Apple's StoreKit framework processes all purchases. We receive confirmation of purchase status (active subscription, lifetime unlock) but never see your payment details.</p>
-<p>We do not use any third-party analytics, crash reporting, or advertising SDKs beyond Superwall.</p>
+<p>Apple's StoreKit framework processes all purchases. We receive confirmation of purchase status (lifetime unlock) but never see your payment details.</p>
+<p>We do not use any third-party analytics, crash reporting, advertising, or paywall SDKs. All purchase flows are handled natively through Apple's StoreKit 2.</p>
 
 <h2 id="health">3. Apple Health Data</h2>
 <div class="highlight"><strong>This section is important.</strong> Sobriety Score integrates with Apple Health (HealthKit) to help you see how recovery is improving your physical health.</div>
@@ -182,7 +176,7 @@
   <li>To provide AI-powered reflection prompts based on your progress</li>
   <li>To deliver craving tracking and trend analysis</li>
   <li>To manage your subscription status and premium feature access</li>
-  <li>To present relevant paywall offers via Superwall</li>
+  <li>To present the in-app purchase offer for premium features</li>
 </ul>
 <p>We do not use your information for advertising, profiling, or sale to third parties.</p>
 
@@ -204,10 +198,6 @@
 
 <h3>Apple StoreKit 2</h3>
 <p>Used to process in-app purchases and subscriptions. All payment processing is handled by Apple. We never receive or store your payment information (credit card, Apple ID password, etc.).</p>
-
-<h3>Superwall</h3>
-<p>Used for paywall presentation and subscription offer management. Superwall collects anonymous device-level data to optimize paywall display. Superwall does not receive your health data, journal entries, or personal recovery information.</p>
-<p>Superwall's privacy policy: <a href="https://superwall.com/privacy" style="color:var(--accent);">superwall.com/privacy</a></p>
 
 <h3>Apple On-Device AI (Foundation Models)</h3>
 <p>Used for AI-powered reflection prompts. All processing occurs on your device using Apple's on-device models. No data is sent to external AI services.</p>
@@ -235,9 +225,8 @@
 <p>Sobriety Score offers optional premium features through in-app purchases managed entirely by Apple's App Store:</p>
 <ul>
   <li>All payments are processed by Apple. We never receive, store, or have access to your credit card number, bank account, or Apple ID credentials.</li>
-  <li>Subscription plans include monthly, annual, and lifetime (one-time purchase) options. See the app for current pricing.</li>
-  <li>Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current billing period.</li>
-  <li>You can manage or cancel subscriptions at any time in Settings → [Your Name] → Subscriptions.</li>
+  <li>Sobriety Score currently offers a one-time purchase to unlock all premium features forever. See the app for current pricing.</li>
+  <li>No recurring subscriptions are used at this time.</li>
   <li>Refunds are handled by Apple. To request a refund, visit <a href="https://reportaproblem.apple.com" style="color:var(--accent);">reportaproblem.apple.com</a>.</li>
 </ul>
 
